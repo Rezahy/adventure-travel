@@ -1,0 +1,57 @@
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+import { Badge } from "./ui/badge";
+import BlogBookmarkButton from "./blog-bookmark-button";
+import ImageAsset from "@/../public/image-asset.jpeg";
+import Image from "next/image";
+
+const BlogPost = () => {
+	return (
+		<Card className="gap-2 pt-0 group h-full">
+			<div className="rounded-t-xl mb-2 shadow overflow-hidden h-[200px] relative">
+				<Image
+					src={ImageAsset}
+					alt="image"
+					width={500}
+					height={500}
+					className="h-full object-cover w-full group-hover:scale-115 transition-all duration-500"
+				/>
+
+				<BlogBookmarkButton />
+			</div>
+			<CardHeader>
+				<CardDescription className="text-xs">
+					<Badge variant="secondary">{new Date().toDateString()}</Badge>
+				</CardDescription>
+				<CardTitle className="text-lg group-hover:underline cursor-pointer">
+					<Link href="#" target="_blank">
+						Blog Title
+					</Link>
+				</CardTitle>
+			</CardHeader>
+			<CardContent className="flex-1">
+				<p className="line-clamp-3">
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae
+					ea maiores dolorum quam reprehenderit vitae, magnam natus provident
+					error nobis.
+				</p>
+			</CardContent>
+			<CardFooter className="text-xs">
+				<p>
+					Written by{" "}
+					<span className="hover:underline font-semibold cursor-pointer text-sm">
+						@reza
+					</span>
+				</p>
+			</CardFooter>
+		</Card>
+	);
+};
+export default BlogPost;
