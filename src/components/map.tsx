@@ -1,0 +1,30 @@
+"use client";
+
+// IMPORTANT: the order matters!
+import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
+import "leaflet-defaulticon-compatibility";
+
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
+const Map = () => {
+	return (
+		<MapContainer
+			className="absolute inset-0 z-0"
+			center={[51.505, -0.09]}
+			zoom={13}
+			scrollWheelZoom
+		>
+			<TileLayer
+				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+			/>
+			<Marker position={[51.505, -0.09]}>
+				<Popup>
+					A pretty CSS3 popup. <br /> Easily customizable.
+				</Popup>
+			</Marker>
+		</MapContainer>
+	);
+};
+export default Map;

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import AppToaster from "@/components/app-toaster";
+import AppSidebarTrigger from "@/components/app-sidebar-trigger";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -42,7 +43,7 @@ export default function RootLayout({
 						<AppSidebar />
 
 						<main className="w-screen">
-							<SidebarTrigger className="mt-5 ml-5" />
+							<AppSidebarTrigger />
 							<section className="max-w-6xl mx-auto">{children}</section>
 						</main>
 						<div className="absolute top-5 right-5">
