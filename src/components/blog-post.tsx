@@ -11,10 +11,14 @@ import { Badge } from "./ui/badge";
 import BlogBookmarkButton from "./blog-bookmark-button";
 import ImageAsset from "@/../public/image-asset.jpeg";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-const BlogPost = () => {
+type BlogPostProps = {
+	className: string;
+};
+const BlogPost = ({ className }: BlogPostProps) => {
 	return (
-		<Card className="gap-2 pt-0 group h-full">
+		<Card className={cn("gap-2 pt-0 group h-full", className)}>
 			<div className="rounded-t-xl mb-2 shadow overflow-hidden h-[200px] relative">
 				<Image
 					src={ImageAsset}
