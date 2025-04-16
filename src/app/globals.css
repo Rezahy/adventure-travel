@@ -125,3 +125,7 @@
 	margin: 0 !important;
 	overflow: hidden;
 }
+
+.leaflet-control-geosearch {
+	color: black !important;
+}

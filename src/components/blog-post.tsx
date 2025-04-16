@@ -12,9 +12,17 @@ import BlogBookmarkButton from "./blog-bookmark-button";
 import ImageAsset from "@/../public/image-asset.jpeg";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { SquarePen, Trash } from "lucide-react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./ui/tooltip";
 
 type BlogPostProps = {
-	className: string;
+	className?: string;
 };
 const BlogPost = ({ className }: BlogPostProps) => {
 	return (
@@ -47,13 +55,39 @@ const BlogPost = ({ className }: BlogPostProps) => {
 					error nobis.
 				</p>
 			</CardContent>
-			<CardFooter className="text-xs">
+			<CardFooter className="text-xs flex flex-col items-start">
 				<p>
-					Written by{" "}
+					Written by
 					<span className="hover:underline font-semibold cursor-pointer text-sm">
 						@reza
 					</span>
 				</p>
+				<div className="flex justify-end w-full space-x-2">
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button variant="outline" size="icon">
+									<SquarePen />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Edit Post</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button variant="outline" size="icon">
+									<Trash />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<p>Delete Post</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+				</div>
 			</CardFooter>
 		</Card>
 	);

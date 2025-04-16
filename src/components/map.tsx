@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 // IMPORTANT: the order matters!
@@ -5,8 +6,34 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { OpenStreetMapProvider, SearchControl } from "leaflet-geosearch";
 import PostPopup from "./post-popup";
+import { useEffect } from "react";
+import "leaflet-geosearch/assets/css/leaflet.css";
+
+const SearchField = () => {
+	const provider = new OpenStreetMapProvider();
+
+	//@ts-expect-error
+	const searchControl = new SearchControl({
+		notFoundMessage: "Sorry, that address could not be found.",
+		provider: provider,
+		style: "bar",
+		showMarker: false,
+	});
+
+	const map = useMap();
+	useEffect(() => {
+		map.addControl(searchControl);
+		return () => {
+			map.removeControl(searchControl);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	return null;
+};
 
 const Map = () => {
 	return (
@@ -16,6 +43,8 @@ const Map = () => {
 			zoom={13}
 			scrollWheelZoom
 		>
+			<SearchField />
+
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
