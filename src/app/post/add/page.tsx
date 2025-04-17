@@ -15,6 +15,12 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import ImageUpload from "@/components/image-upload";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const LazyMap = dynamic(() => import("@/components/map"), {
+	ssr: false,
+	loading: () => <p>Loading...</p>,
+});
 
 const AddPost = () => {
 	const [imageUrl, setImageUrl] = useState("");
@@ -45,6 +51,9 @@ const AddPost = () => {
 											setImageUrl(url);
 										}}
 									/>
+								</div>
+								<div className="relative w-full h-[400px]">
+									<LazyMap />
 								</div>
 							</div>
 						</div>
