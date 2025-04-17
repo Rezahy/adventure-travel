@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import "@uploadthing/react/styles.css";
 import {
 	Card,
 	CardContent,
@@ -28,8 +27,8 @@ const AddPost = () => {
 				</CardHeader>
 				<CardContent>
 					<form>
-						<div className="grid w-full items-center gap-4">
-							<div className="flex flex-col space-y-1.5">
+						<div className="grid w-full items-center">
+							<div className="flex flex-col space-y-2">
 								<Label htmlFor="title">Title</Label>
 								<Input id="title" placeholder="Title of your post" />
 								<Label htmlFor="content">Content</Label>
@@ -47,20 +46,6 @@ const AddPost = () => {
 										}}
 									/>
 								</div>
-								{/* <UploadButton
-									config={{ cn: twMerge }}
-									className="text-primary"
-									endpoint="imageUploader"
-									onClientUploadComplete={(res) => {
-										// Do something with the response
-										console.log("Files: ", res);
-										alert("Upload Completed");
-									}}
-									onUploadError={(error: Error) => {
-										// Do something with the error.
-										alert(`ERROR! ${error.message}`);
-									}}
-								/> */}
 							</div>
 						</div>
 					</form>

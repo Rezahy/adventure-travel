@@ -36,6 +36,7 @@ const ImageUpload = ({ endPoint, onChange, value }: ImageUploadProps) => {
 	}
 	return (
 		<UploadDropzone
+			className="py-8 ut-button:bg-primary ut-button:px-4 ut-button:py-2 ut-button:text-primary-foreground ut-button:shadow-xs  ut-button:ut-readying:bg-primary/50 ut-label:text-lg "
 			endpoint={endPoint}
 			onClientUploadComplete={(res) => {
 				onChange(res?.[0].ufsUrl);
