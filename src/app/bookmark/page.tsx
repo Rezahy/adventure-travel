@@ -13,7 +13,7 @@ const BookmarkedPage = () => {
 			{bookmarkedBlogPostList.length > 0 ? (
 				<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
 					<AnimatePresence>
-						{bookmarkedBlogPostList.map((article, index) => (
+						{bookmarkedBlogPostList.map((_, index) => (
 							<motion.div
 								layout
 								key={index}

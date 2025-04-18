@@ -66,8 +66,10 @@ const BlogPost = ({ className }: BlogPostProps) => {
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<Button variant="outline" size="icon">
-									<SquarePen />
+								<Button variant="outline" size="icon" asChild>
+									<Link href="/post/edit/1">
+										<SquarePen />
+									</Link>
 								</Button>
 							</TooltipTrigger>
 							<TooltipContent>
