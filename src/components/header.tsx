@@ -1,10 +1,8 @@
-import { PropsWithChildren } from "react";
-
-const Header = ({ children }: PropsWithChildren) => {
+const Header = () => {
 	return (
-		<h1 className="text-primary text-xl sm:text-3xl font-bold pb-7">
-			{children}
-		</h1>
+		<header className="max-w-6xl mx-auto">
+			<h1 className="px-7 sm:px-10">Adventure Travel</h1>
+		</header>
 	);
 };
 export default Header;

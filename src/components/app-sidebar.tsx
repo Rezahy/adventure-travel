@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Map, Search } from "lucide-react";
 
 import {
 	Sidebar,
@@ -41,7 +41,31 @@ const AppSidebar = () => {
 	};
 	return (
 		<Sidebar collapsible="icon">
-			<SidebarHeader className="relative mt-2 group-data-[collapsible=icon]:hidden">
+			<SidebarHeader className="mt-2">
+				<SidebarMenu>
+					<SidebarMenuItem>
+						<SidebarMenuButton
+							tooltip="Adventure Travel"
+							asChild
+							size="lg"
+							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+						>
+							<Link href="/">
+								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+									<Map className="size-4" />
+								</div>
+								<div className="grid flex-1 text-left text-sm leading-tight">
+									<span className="truncate font-semibold">
+										Adventure Travel
+									</span>
+									<span className="truncate text-xs">Escape and unwind!</span>
+								</div>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
+			</SidebarHeader>
+			<SidebarHeader className="relative group-data-[collapsible=icon]:hidden">
 				<form onSubmit={onSubmitHandler}>
 					<Input
 						placeholder="Search posts ..."

@@ -1,12 +1,7 @@
 import { MenuItemLink } from "@/@types/menu-item-link";
-import { Bookmark, Home, LayoutDashboard, MapPin } from "lucide-react";
+import { Bookmark, LayoutDashboard, MapPin } from "lucide-react";
 
 export const menuItemLinks: MenuItemLink[] = [
-	{
-		title: "Home",
-		url: "/",
-		icon: Home,
-	},
 	{
 		title: "Bookmarked",
 		url: "/bookmark",
