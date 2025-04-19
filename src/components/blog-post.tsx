@@ -58,9 +58,12 @@ const BlogPost = ({ className }: BlogPostProps) => {
 			<CardFooter className="text-xs flex flex-col items-start">
 				<p>
 					Written by
-					<span className="hover:underline font-semibold cursor-pointer text-sm">
+					<Link
+						href="/profile/reza"
+						className="hover:underline font-semibold cursor-pointer text-sm"
+					>
 						@reza
-					</span>
+					</Link>
 				</p>
 				<div className="flex justify-end w-full space-x-2">
 					<TooltipProvider>
