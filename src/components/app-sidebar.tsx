@@ -20,6 +20,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FormEvent, useRef } from "react";
 import { menuItemLinks } from "@/lib/menu-item-link";
+import FlipText from "./flip-text";
 
 const AppSidebar = () => {
 	const router = useRouter();
@@ -51,12 +52,12 @@ const AppSidebar = () => {
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
 							<Link href="/">
-								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-[#B8336A] text-sidebar-primary-foreground">
 									<Map className="size-4" />
 								</div>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-semibold">
-										Adventure Travel
+										<FlipText>Adventure Travel</FlipText>
 									</span>
 									<span className="truncate text-xs">Escape and unwind!</span>
 								</div>
