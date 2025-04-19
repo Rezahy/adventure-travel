@@ -9,6 +9,7 @@ import AppToaster from "@/components/app-toaster";
 import AppSidebarTrigger from "@/components/app-sidebar-trigger";
 import Footer from "@/components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -49,27 +50,29 @@ export default function RootLayout({
 				<body
 					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
-					<ThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
-					>
-						<SidebarProvider>
-							<AppSidebar />
+					<EdgeStoreProvider>
+						<ThemeProvider
+							attribute="class"
+							defaultTheme="system"
+							enableSystem
+							disableTransitionOnChange
+						>
+							<SidebarProvider>
+								<AppSidebar />
 
-							<main className="w-screen">
-								<AppSidebarTrigger />
-								<section className="max-w-6xl mx-auto">{children}</section>
-							</main>
+								<main className="w-screen">
+									<AppSidebarTrigger />
+									<section className="max-w-6xl mx-auto">{children}</section>
+								</main>
 
-							<div className="absolute top-5 right-5">
-								<ModeToggle />
-							</div>
-						</SidebarProvider>
-						<AppToaster />
-						<Footer />
-					</ThemeProvider>
+								<div className="absolute top-5 right-5">
+									<ModeToggle />
+								</div>
+							</SidebarProvider>
+							<AppToaster />
+							<Footer />
+						</ThemeProvider>
+					</EdgeStoreProvider>
 				</body>
 			</html>
 		</ClerkProvider>

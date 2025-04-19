@@ -5,12 +5,13 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import ImageUpload from "@/components/image-upload";
+// import ImageUpload from "@/components/image-upload";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import FormStepper, { FormStep } from "@/components/form-stepper";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EdgeStoreSingleImageUpload } from "@/components/edgestore-image-upload";
 
 const LazyMap = dynamic(() => import("@/components/map"), {
 	ssr: false,
@@ -18,7 +19,9 @@ const LazyMap = dynamic(() => import("@/components/map"), {
 });
 
 const AddPost = () => {
-	const [imageUrl, setImageUrl] = useState("");
+	const [imageUrl, setImageUrl] = useState(
+		"https://files.edgestore.dev/mpzt2hrp8wqt4swm/publicFiles/_public/bd01369d-d670-45f1-8e77-43729553c239.jpeg"
+	);
 	const [currentStep, setCurrentStep] = useState(1);
 	const formSteps: FormStep[] = [
 		{
@@ -56,13 +59,17 @@ const AddPost = () => {
 			title: "Upload Image",
 			description: "add an Image to your post",
 			component: (
-				<div className="border rounded-lg p-4">
-					<ImageUpload
+				<div className="border rounded-lg p-4 flex justify-center">
+					{/* <ImageUpload
 						endPoint="postImage"
 						value={imageUrl}
 						onChange={(url) => {
 							setImageUrl(url);
 						}}
+					/> */}
+					<EdgeStoreSingleImageUpload
+						value={imageUrl}
+						onChange={(url) => setImageUrl(url)}
 					/>
 				</div>
 			),
