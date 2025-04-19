@@ -43,9 +43,7 @@ const BlogPost = ({ className }: BlogPostProps) => {
 					<Badge variant="secondary">{new Date().toDateString()}</Badge>
 				</CardDescription>
 				<CardTitle className="text-lg group-hover:underline cursor-pointer">
-					<Link href="#" target="_blank">
-						Blog Title
-					</Link>
+					<Link href="/post/1">Blog Title</Link>
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-1">
