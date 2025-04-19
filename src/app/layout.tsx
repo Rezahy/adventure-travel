@@ -8,6 +8,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import AppToaster from "@/components/app-toaster";
 import AppSidebarTrigger from "@/components/app-sidebar-trigger";
 import Footer from "@/components/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -30,32 +31,47 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-			>
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
+		<ClerkProvider
+			appearance={{
+				elements: {
+					organizationSwitcherPopoverRootBox: {
+						width: "100%",
+						pointerEvents: "auto",
+					},
+					userButtonPopoverRootBox: {
+						width: "100%",
+						pointerEvents: "auto",
+					},
+				},
+			}}
+		>
+			<html lang="en" suppressHydrationWarning>
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
-					<SidebarProvider>
-						<AppSidebar />
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<SidebarProvider>
+							<AppSidebar />
 
-						<main className="w-screen">
-							<AppSidebarTrigger />
-							<section className="max-w-6xl mx-auto">{children}</section>
-						</main>
+							<main className="w-screen">
+								<AppSidebarTrigger />
+								<section className="max-w-6xl mx-auto">{children}</section>
+							</main>
 
-						<div className="absolute top-5 right-5">
-							<ModeToggle />
-						</div>
-					</SidebarProvider>
-					<AppToaster />
-					<Footer />
-				</ThemeProvider>
-			</body>
-		</html>
+							<div className="absolute top-5 right-5">
+								<ModeToggle />
+							</div>
+						</SidebarProvider>
+						<AppToaster />
+						<Footer />
+					</ThemeProvider>
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }

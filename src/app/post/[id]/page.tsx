@@ -13,7 +13,7 @@ const PostDetailsPage = () => {
 	return (
 		<>
 			<section className="px-7 py-7 sm:px-10 pb-10">
-				<div className="shadow overflow-hidden h-[50vh] relative rounded-xl group">
+				<div className="shadow overflow-hidden h-[70vh] relative rounded-xl group">
 					<Image
 						src={ImageAsset}
 						alt="post"

@@ -1,10 +1,10 @@
 "use client";
 
-import { Map, Search } from "lucide-react";
-
+import { LogIn, Map, Search, UserRoundPlus } from "lucide-react";
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -21,9 +21,14 @@ import { Button } from "./ui/button";
 import { FormEvent, useRef } from "react";
 import { menuItemLinks } from "@/lib/menu-item-link";
 import FlipText from "./flip-text";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+import { useTheme } from "next-themes";
 
 const AppSidebar = () => {
 	const router = useRouter();
+	const { user } = useUser();
+	const { theme, systemTheme } = useTheme();
 	const { isMobile, setOpenMobile } = useSidebar();
 	const pathname = usePathname();
 	const searchRef = useRef<HTMLInputElement | null>(null);
@@ -49,6 +54,7 @@ const AppSidebar = () => {
 							tooltip="Adventure Travel"
 							asChild
 							size="lg"
+							isActive={pathname === "/"}
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
 							<Link href="/">
@@ -58,8 +64,11 @@ const AppSidebar = () => {
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-semibold">
 										<FlipText>Adventure Travel</FlipText>
+										<span className="sr-only">Adventure Travel</span>
 									</span>
-									<span className="truncate text-xs">Escape and unwind!</span>
+									<span className="truncate text-xs mt-1">
+										Escape and unwind!
+									</span>
 								</div>
 							</Link>
 						</SidebarMenuButton>
@@ -106,7 +115,69 @@ const AppSidebar = () => {
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
+				<SignedOut>
+					<SidebarGroup>
+						<SidebarGroupLabel>Authentication</SidebarGroupLabel>
+						<SidebarGroupContent>
+							<SidebarMenu>
+								<SidebarMenuItem>
+									<SidebarMenuButton
+										tooltip="sign up"
+										asChild
+										isActive={pathname === "/sign-up"}
+									>
+										<Link href="/sign-up">
+											<UserRoundPlus />
+											<span>Sign up</span>
+										</Link>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+								<SidebarMenuItem>
+									<SidebarMenuButton
+										tooltip="sign in"
+										asChild
+										isActive={pathname === "/sign-in"}
+									>
+										<Link href="/sign-in">
+											<LogIn />
+											<span>Sign in</span>
+										</Link>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+							</SidebarMenu>
+						</SidebarGroupContent>
+					</SidebarGroup>
+				</SignedOut>
 			</SidebarContent>
+			<SignedIn>
+				<SidebarFooter>
+					<SidebarMenu>
+						<SidebarMenuItem>
+							<SidebarMenuButton
+								size="lg"
+								className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+							>
+								<SignedIn>
+									{theme === "dark" ||
+									(theme === "system" && systemTheme === "dark") ? (
+										<UserButton appearance={{ baseTheme: dark }} />
+									) : (
+										<UserButton />
+									)}
+								</SignedIn>
+								<div className="grid flex-1 text-left text-sm leading-tight">
+									<span className="truncate font-semibold">
+										{user?.username}
+									</span>
+									<span className="truncate text-xs">
+										{user?.emailAddresses[0].toString()}
+									</span>
+								</div>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					</SidebarMenu>
+				</SidebarFooter>
+			</SignedIn>
 		</Sidebar>
 	);
 };
