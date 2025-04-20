@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String           @id @default(uuid())
+  clerkId         String           @unique
+  email           String           @unique
+  username        String?          @unique
+  role            Role             @default(USER)
+  image_url       String?          @map("imageUrl")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  comments        Comment[]
+  writtenPosts    Post[]           @relation("WrittenPosts")
+  commentLikes    CommentLike[]
+  // bookmarkedPosts Post[]           @relation("BookmarkedPosts")
+  bookmarkedPosts Post[]           @relation("BookmarkedPosts")
+  likedPosts      Like[]
+  dislikedPosts   CommentDislike[]
+}
+
+model Post {
+  id           String    @id @default(uuid())
+  imageUrl     String
+  title        String
+  content      String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  author       User      @relation("WrittenPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     String
+  // bookmarkedBy   User?     @relation("BookmarkedPosts", fields: [bookmarkedById], references: [id], onDelete: Cascade)
+  // bookmarkedById String?
+  likedBy      Like[]
+  comments     Comment[]
+  bookmarkedBy User[]    @relation("BookmarkedPosts")
+  location     Location?
+}
+
+model Location {
+  id        String @id @default(uuid())
+  latitude  Float
+  longitude Float
+  post      Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String @unique
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
+
+model CommentLike {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  Comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+}
+
+model CommentDislike {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  Comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+}
+
+model Comment {
+  id         String           @id @default(uuid())
+  message    String
+  createdAt  DateTime         @default(now())
+  updateAt   DateTime         @updatedAt
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  Post       Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     String
+  likedBy    CommentLike[]
+  dislikedBy CommentDislike[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
