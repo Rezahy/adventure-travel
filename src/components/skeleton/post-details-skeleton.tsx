@@ -24,7 +24,10 @@ const PostDetailsSkeleton = () => {
 			</div>
 			<footer className="py-4 flex justify-between items-center">
 				<Skeleton className="w-[30%] h-2" />
-				<Skeleton className="w-29 h-9" />
+				<div className="space-x-3 flex">
+					<Skeleton className="w-19 h-9" />
+					<Skeleton className="w-29 h-9" />
+				</div>
 			</footer>
 		</section>
 	);

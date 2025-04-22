@@ -1,7 +1,13 @@
+import { getUserPosts } from "@/actions/postAction";
+import AnimatedText from "@/components/animated-text";
 import BlogPostList from "@/components/blog-post-list";
+import EmptyView from "@/components/empty-view";
+import BlogPostListSkeleton from "@/components/skeleton/blog-post-list-skeleton";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
 import { CirclePlus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const DashboardPage = () => {
 	return (
@@ -13,8 +19,25 @@ const DashboardPage = () => {
 					<Link href="/post/add">Create Post</Link>
 				</Button>
 			</div>
-			<BlogPostList />
+			<Suspense fallback={<BlogPostListSkeleton />}>
+				<UserPostsSuspenseWrapper />
+			</Suspense>
 		</section>
 	);
 };
 export default DashboardPage;
+
+const UserPostsSuspenseWrapper = async () => {
+	const { userId: clerkId } = await auth();
+	if (clerkId) {
+		const posts = await getUserPosts(clerkId);
+		if (posts.length > 0) {
+			return <BlogPostList posts={posts} />;
+		}
+		return (
+			<AnimatedText>
+				<EmptyView>You don&apos;t have published post yet!</EmptyView>
+			</AnimatedText>
+		);
+	}
+};

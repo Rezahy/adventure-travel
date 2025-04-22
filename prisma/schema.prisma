@@ -60,25 +60,25 @@ model Location {
 model Like {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }
 
 model CommentLike {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  Comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
 }
 
 model CommentDislike {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   Comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
@@ -91,7 +91,7 @@ model Comment {
   updateAt   DateTime         @updatedAt
   user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  Post       Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post       Post             @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     String
   likedBy    CommentLike[]
   dislikedBy CommentDislike[]

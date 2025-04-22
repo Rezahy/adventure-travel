@@ -9,6 +9,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import * as React from "react";
 import { Button } from "./ui/button";
 import { XIcon } from "lucide-react";
+import Image from "next/image";
 type EdgeStoreSingleImageUploadProps = {
 	onChange: (url: string) => void;
 	value: string;
@@ -37,9 +38,11 @@ export function EdgeStoreSingleImageUpload({
 	if (value) {
 		return (
 			<div className="relative size-50">
-				<img
+				<Image
 					className="h-full w-full rounded-md object-cover"
 					src={value}
+					width={200}
+					height={200}
 					alt={"uploaded image"}
 				/>
 

@@ -1,20 +1,15 @@
+import { getPostComments } from "@/actions/commentAction";
 import CommentListItem from "./comment-list-item";
-
-const CommentList = async () => {
+type CommentListProps = {
+	comments: Awaited<ReturnType<typeof getPostComments>>;
+};
+const CommentList = async ({ comments }: CommentListProps) => {
 	return (
 		<div className="gap-5 flex flex-col pt-5 pb-10">
-			{Array.from({ length: 5 }).map((_, index) => (
-				<CommentListItem key={index} />
+			{comments.map((comment) => (
+				<CommentListItem key={comment.id} comment={comment} />
 			))}
 		</div>
 	);
 };
 export default CommentList;
-
-const CommentListEmptyView = () => {
-	return (
-		<div>
-			<h4>there is no comment</h4>
-		</div>
-	);
-};

@@ -1,16 +1,11 @@
-"use client";
+import { getAllPostsLocation } from "@/actions/postAction";
+import LazyPostsLocationMap from "@/components/map/lazy-posts-location-map";
 
-import dynamic from "next/dynamic";
-
-const LazyMap = dynamic(() => import("@/components/map"), {
-	ssr: false,
-	loading: () => <p>Loading...</p>,
-});
-
-const MapPage = () => {
+const MapPage = async () => {
+	const posts = await getAllPostsLocation();
 	return (
 		<div>
-			<LazyMap />
+			<LazyPostsLocationMap posts={posts} />
 		</div>
 	);
 };

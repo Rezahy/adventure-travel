@@ -1,7 +1,15 @@
-import Image from "next/image";
-import ImageAsset from "@/../public/image-asset.jpeg";
 import { Badge } from "@/components/ui/badge";
+import AuthorProfile from "./author-profile";
+import {
+	getPublishedPostCountByUsername,
+	getPostsByUsername,
+} from "@/actions/postAction";
 import BlogPostList from "@/components/blog-post-list";
+import { Suspense } from "react";
+import BlogPostListSkeleton from "@/components/skeleton/blog-post-list-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
+import { findUserByUsername } from "@/actions/userAction";
+import EmptyView from "@/components/empty-view";
 
 const UserProfilePage = async ({
 	params,
@@ -9,26 +17,49 @@ const UserProfilePage = async ({
 	params: Promise<{ username: string }>;
 }) => {
 	const { username } = await params;
+	const user = await findUserByUsername(username);
+	if (!user) {
+		return <EmptyView>There is&apos;t any user with this username</EmptyView>;
+	}
 	return (
 		<section className="px-7 py-7 sm:px-10 pb-10">
-			<div className="flex flex-col items-center">
-				<Image
-					src={ImageAsset}
-					alt="user-profile"
-					className="rounded-full object-cover  w-35 h-35 shadow md:w-40 md:h-40"
-				></Image>
-				<h1 className="sm:text-xl md:text-2xl font-semibold py-3">
-					{username}
-				</h1>
-			</div>
+			<AuthorProfile params={params} />
 			<div className="flex items-center space-x-3">
 				<h1 className="text-lg sm:text-xl md:text-2xl font-semibold py-7">
 					Published Posts
 				</h1>
-				<Badge className="bg-[#B8336A] text-white shadow">11</Badge>
+				<Suspense fallback={<Skeleton className="size-3" />}>
+					<BadgePostListSuspenseWrapper params={params} />
+				</Suspense>
 			</div>
-			<BlogPostList />
+			<Suspense fallback={<BlogPostListSkeleton />}>
+				<BlogPostListSuspenseWrapper params={params} />
+			</Suspense>
 		</section>
 	);
 };
 export default UserProfilePage;
+
+const BlogPostListSuspenseWrapper = async ({
+	params,
+}: {
+	params: Promise<{ username: string }>;
+}) => {
+	const { username } = await params;
+	const posts = await getPostsByUsername(username);
+	return <BlogPostList posts={posts} />;
+};
+
+const BadgePostListSuspenseWrapper = async ({
+	params,
+}: {
+	params: Promise<{ username: string }>;
+}) => {
+	const { username } = await params;
+	const publishedPostCount = await getPublishedPostCountByUsername(username);
+	return (
+		<Badge className="bg-[#B8336A] text-white shadow">
+			{publishedPostCount}
+		</Badge>
+	);
+};

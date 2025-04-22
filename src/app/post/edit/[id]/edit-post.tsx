@@ -10,33 +10,48 @@ import FormStepper, { FormStep } from "@/components/form-stepper";
 import { ChevronLeftIcon, ChevronRightIcon, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EdgeStoreSingleImageUpload } from "@/components/edgestore-image-upload";
-import { toast } from "sonner";
 import { LatLng } from "leaflet";
-import LazyMarkAbleMap from "@/components/map/lazy-mark-able-map";
-
-import { createPost } from "@/actions/postAction";
 import { useAuth } from "@clerk/nextjs";
+import LazyMarkAbleMap from "@/components/map/lazy-mark-able-map";
+import { toast } from "sonner";
+import { editPostByAdmin, editPostByAuthor } from "@/actions/postAction";
 import { useRouter } from "next/navigation";
 import LazyLocationMarker from "@/components/map/lazy-location-marker";
+import { Location, Role } from "@prisma/client";
 
-const AddPost = () => {
-	const [imageUrl, setImageUrl] = useState(
-		"https://files.edgestore.dev/mpzt2hrp8wqt4swm/publicFiles/_public/bd01369d-d670-45f1-8e77-43729553c239.jpeg"
-	);
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
+type EditPostProps = {
+	postId: string;
+	userRole: Role;
+	defaultPostTitle: string;
+	defaultPostContent: string;
+	defaultPostImageUrl: string;
+	defaultPostLocation: Location;
+};
+const EditPost = ({
+	postId,
+	userRole,
+	defaultPostTitle,
+	defaultPostContent,
+	defaultPostImageUrl,
+	defaultPostLocation,
+}: EditPostProps) => {
+	const [imageUrl, setImageUrl] = useState(defaultPostImageUrl);
+	const [title, setTitle] = useState(defaultPostTitle);
+	const [content, setContent] = useState(defaultPostContent);
 	const [currentStep, setCurrentStep] = useState(1);
-	const [position, setPosition] = useState<LatLng | null>(null);
+	const [position, setPosition] = useState<LatLng>(
+		() =>
+			new LatLng(defaultPostLocation.latitude, defaultPostLocation.longitude)
+	);
 	const [isPending, startTransition] = useTransition();
-	const { isSignedIn, userId: clerkId } = useAuth();
+	const { userId: clerkId } = useAuth();
 	const router = useRouter();
-
 	const formSteps: FormStep[] = [
 		{
 			id: "form-step-1",
 			level: 1,
 			title: "Title & Content",
-			description: "Add your post title and content",
+			description: "Edit your post title and content",
 			component: (
 				<>
 					<Label htmlFor="title">Title</Label>
@@ -60,11 +75,11 @@ const AddPost = () => {
 		{
 			id: "form-step-2",
 			level: 2,
-			title: "Post Location",
-			description: "Mark your post location",
+			title: "Edit Post Location",
+			description: "Edit Mark your post location",
 			component: (
 				<div className="relative w-full h-[400px]">
-					<LazyMarkAbleMap>
+					<LazyMarkAbleMap center={[position.lat, position.lng]}>
 						<LazyLocationMarker position={position} setPosition={setPosition} />
 					</LazyMarkAbleMap>
 				</div>
@@ -74,7 +89,7 @@ const AddPost = () => {
 			id: "form-step-3",
 			level: 3,
 			title: "Upload Image",
-			description: "add an Image to your post",
+			description: "Edit your image ",
 			component: (
 				<div className="border rounded-lg p-4 flex justify-center">
 					<EdgeStoreSingleImageUpload
@@ -110,20 +125,31 @@ const AddPost = () => {
 		setCurrentStep((prev) => prev + -1);
 	};
 	const createPostHandler = () => {
-		if (isSignedIn && clerkId && position) {
-			startTransition(async () => {
-				await createPost(
+		startTransition(async () => {
+			if (clerkId && userRole === "ADMIN") {
+				await editPostByAdmin(
 					clerkId,
+					postId,
 					title,
 					content,
 					imageUrl,
 					position.lat,
 					position.lng
 				);
-				toast.success("post created successfully.");
-				router.replace("/dashboard");
-			});
-		}
+			} else if (clerkId && userRole === "USER") {
+				await editPostByAuthor(
+					clerkId,
+					postId,
+					title,
+					content,
+					imageUrl,
+					position.lat,
+					position.lng
+				);
+			}
+			toast.success("post edited successfully");
+			router.replace("/dashboard");
+		});
 	};
 	return (
 		<section className="px-7 py-7 sm:px-10 pb-10">
@@ -152,7 +178,7 @@ const AddPost = () => {
 							onClick={createPostHandler}
 							className="disabled:cursor-not-allowed cursor-pointer"
 						>
-							{isPending ? <Loader className="animate-spin" /> : "Create Post"}
+							{isPending ? <Loader className="animate-spin" /> : "Edit Post"}
 						</Button>
 					) : (
 						<Button onClick={onNextStepHandler}>
@@ -165,4 +191,4 @@ const AddPost = () => {
 		</section>
 	);
 };
-export default AddPost;
+export default EditPost;
