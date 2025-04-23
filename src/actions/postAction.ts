@@ -495,3 +495,33 @@ export const editPostByAdmin = async (
 		throw new Error("failed to edit post by admin");
 	}
 };
+
+export const searchPosts = async (query: string) => {
+	try {
+		const posts = await prisma.post.findMany({
+			where: {
+				OR: [
+					{
+						title: {
+							contains: query,
+							mode: "insensitive",
+						},
+					},
+					{
+						content: {
+							mode: "insensitive",
+							contains: query,
+						},
+					},
+				],
+			},
+			include: {
+				author: true,
+			},
+		});
+		return posts;
+	} catch (error) {
+		console.log("error on searchPosts: ", error);
+		throw new Error("failed to search posts");
+	}
+};

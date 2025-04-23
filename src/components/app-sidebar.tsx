@@ -36,7 +36,7 @@ const AppSidebar = () => {
 		e.preventDefault();
 		if (searchRef.current && searchRef.current.value.trim().length > 0) {
 			const { value } = searchRef.current;
-			router.push(`/search/${decodeURI(value)}`);
+			router.push(`/search?q=${decodeURI(value)}`);
 			sidebarMenuButtonClickHandler();
 		}
 	};

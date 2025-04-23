@@ -110,9 +110,11 @@ const CommentPostCountSuspenseWrapper = async ({
 	const { id } = await params;
 	const commentCount = await getPostCommentsCount(id);
 	return (
-		<Button variant="outline">
-			<MessageSquare />
-			{commentCount}
+		<Button variant="outline" asChild>
+			<Link href="#comments">
+				<MessageSquare />
+				{commentCount}
+			</Link>
 		</Button>
 	);
 };
