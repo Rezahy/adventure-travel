@@ -8,6 +8,8 @@ export const getPostComments = async (postId: string) => {
 		const comments = await prisma.comment.findMany({
 			include: {
 				user: true,
+				likedBy: true,
+				dislikedBy: true,
 			},
 			where: {
 				postId,
@@ -140,5 +142,145 @@ export const updateCommentByAdmin = async (
 	} catch (error) {
 		console.log("error on updateCommentByAdmin: ", error);
 		throw new Error("Failed to update comment");
+	}
+};
+
+export const isUserLikeComment = async (
+	clerkId: string | null,
+	commentId: string
+) => {
+	try {
+		if (clerkId) {
+			const userLikedCommentsData = await prisma.user.findUnique({
+				where: { clerkId },
+				select: {
+					commentLikes: true,
+				},
+			});
+			if (userLikedCommentsData) {
+				return userLikedCommentsData.commentLikes.some(
+					(comment) => comment.commentId === commentId
+				);
+			}
+		}
+
+		return false;
+	} catch (error) {
+		console.log("error on isUserLikeComment: ", error);
+		throw new Error("failed to get is user like comment");
+	}
+};
+
+export const isUserDislikeComment = async (
+	clerkId: string | null,
+	commentId: string
+) => {
+	try {
+		if (clerkId) {
+			const userLikedCommentsData = await prisma.user.findUnique({
+				where: { clerkId },
+				select: {
+					commentDislikes: true,
+				},
+			});
+			if (userLikedCommentsData) {
+				return userLikedCommentsData.commentDislikes.some(
+					(comment) => comment.commentId === commentId
+				);
+			}
+		}
+
+		return false;
+	} catch (error) {
+		console.log("error on isUserDislikeComment: ", error);
+		throw new Error("failed to get is user dislike comment");
+	}
+};
+
+export const likeComment = async (clerkId: string, commentId: string) => {
+	try {
+		const isUserDisliked = await isUserDislikeComment(clerkId, commentId);
+		if (isUserDisliked) {
+			await deleteDislikeComment(clerkId, commentId);
+		}
+		await prisma.commentLike.create({
+			data: {
+				user: {
+					connect: {
+						clerkId,
+					},
+				},
+				comment: {
+					connect: {
+						id: commentId,
+					},
+				},
+			},
+		});
+		revalidatePath("/post/[id]");
+	} catch (error) {
+		console.log("error on likeComment:", error);
+		throw new Error("failed to like a comment");
+	}
+};
+
+export const deleteLikeComment = async (clerkId: string, commentId: string) => {
+	try {
+		const commentLikeData = await prisma.commentLike.findFirst({
+			where: { commentId, user: { clerkId } },
+			select: { id: true },
+		});
+		if (commentLikeData) {
+			await prisma.commentLike.delete({ where: { id: commentLikeData.id } });
+			revalidatePath("/post/[id]");
+		}
+	} catch (error) {
+		console.log("error on likeComment:", error);
+		throw new Error("failed to like a comment");
+	}
+};
+export const dislikeComment = async (clerkId: string, commentId: string) => {
+	try {
+		const isUserLiked = await isUserLikeComment(clerkId, commentId);
+		if (isUserLiked) {
+			await deleteLikeComment(clerkId, commentId);
+		}
+		await prisma.commentDislike.create({
+			data: {
+				user: {
+					connect: {
+						clerkId,
+					},
+				},
+				comment: {
+					connect: {
+						id: commentId,
+					},
+				},
+			},
+		});
+		revalidatePath("/post/[id]");
+	} catch (error) {
+		console.log("error on dislikeComment:", error);
+		throw new Error("failed to dislike a comment");
+	}
+};
+
+export const deleteDislikeComment = async (
+	clerkId: string,
+	commentId: string
+) => {
+	try {
+		const commentDislikeData = await prisma.commentDislike.findFirst({
+			where: { commentId, user: { clerkId } },
+			select: { id: true },
+		});
+		if (commentDislikeData) {
+			await prisma.commentDislike.delete({ where: { id: commentDislikeData.id } });
+			revalidatePath("/post/[id]");
+		}
+	} catch (error) {
+		console.log("error on deleteDislikeComment:", error);
+		throw new Error("failed to delete dislike a comment");
 	}
 };

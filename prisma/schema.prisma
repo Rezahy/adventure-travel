@@ -29,7 +29,7 @@ model User {
   // bookmarkedPosts Post[]           @relation("BookmarkedPosts")
   bookmarkedPosts Post[]           @relation("BookmarkedPosts")
   likedPosts      Like[]
-  dislikedPosts   CommentDislike[]
+  commentDislikes CommentDislike[]
 }
 
 model Post {
@@ -80,7 +80,7 @@ model CommentDislike {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  Comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
 }
 

@@ -1,24 +1,32 @@
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "./ui/button";
-import { EllipsisVertical, ThumbsDown, ThumbsUp } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { getPostComments } from "@/actions/commentAction";
+import {
+	getPostComments,
+	isUserDislikeComment,
+	isUserLikeComment,
+} from "@/actions/commentAction";
 import CommentDeleteButton from "./comment-delete-button";
 import { findUser } from "@/actions/userAction";
 import { auth } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import CommentEditButton from "./comment-edit-button";
+import CommentLikeButton from "./comment-like-button";
+import CommentDislikeButton from "./comment-dislike-button";
 type CommentListItemProps = {
 	comment: Awaited<ReturnType<typeof getPostComments>>[number];
 };
 const CommentListItem = async ({ comment }: CommentListItemProps) => {
 	const { userId: clerkId } = await auth();
 	let userData: User | null = null;
+	const isLiked = await isUserLikeComment(clerkId, comment.id);
+	const isDisliked = await isUserDislikeComment(clerkId, comment.id);
 	if (clerkId) {
 		userData = await findUser(clerkId);
 	}
@@ -47,18 +55,8 @@ const CommentListItem = async ({ comment }: CommentListItemProps) => {
 						})}
 					</span>
 					<div className="flex space-x-4">
-						<div className="flex text-xs items-center">
-							<Button variant="ghost">
-								<ThumbsUp />
-							</Button>
-							<span>1000</span>
-						</div>
-						<div className="flex text-xs items-center">
-							<Button variant="ghost">
-								<ThumbsDown />
-							</Button>
-							<span>20</span>
-						</div>
+						<CommentLikeButton isLiked={isLiked} comment={comment} />
+						<CommentDislikeButton isDisliked={isDisliked} comment={comment} />
 					</div>
 				</div>
 			</div>
