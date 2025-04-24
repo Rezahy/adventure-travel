@@ -61,8 +61,8 @@ const HomeCarousel = ({ images }: HomeCarouselProps) => {
 										src={image.imageUrl}
 										key={image.id}
 										alt={image.title}
-										width={500}
-										height={500}
+										width={1000}
+										height={1000}
 										className="h-full object-cover w-full"
 									/>
 								</div>

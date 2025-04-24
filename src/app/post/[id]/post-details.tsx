@@ -30,8 +30,8 @@ const PostDetails = async ({ post, params }: PostDetailsProps) => {
 					<Image
 						src={post.imageUrl}
 						alt="post"
-						width={500}
-						height={500}
+						width={1000}
+						height={1000}
 						className="w-full h-full object-cover group-hover:scale-115 transition-all duration-500"
 					/>
 

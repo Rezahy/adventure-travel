@@ -41,7 +41,7 @@ const BookmarkBlogPost = ({ className, post }: BlogPostProps) => {
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-1">
-				<p className="line-clamp-3">{post.content}</p>
+				<p className="line-clamp-3 text-justify">{post.content}</p>
 			</CardContent>
 			<CardFooter className="text-xs flex flex-col items-start">
 				<p>

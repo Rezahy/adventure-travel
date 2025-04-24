@@ -20,9 +20,7 @@ import { useRouter } from "next/navigation";
 import LazyLocationMarker from "@/components/map/lazy-location-marker";
 
 const AddPost = () => {
-	const [imageUrl, setImageUrl] = useState(
-		"https://files.edgestore.dev/mpzt2hrp8wqt4swm/publicFiles/_public/bd01369d-d670-45f1-8e77-43729553c239.jpeg"
-	);
+	const [imageUrl, setImageUrl] = useState("");
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [currentStep, setCurrentStep] = useState(1);
@@ -50,7 +48,7 @@ const AddPost = () => {
 					<Textarea
 						id="content"
 						placeholder="Content of your post"
-						className="min-h-[100px]"
+						className="min-h-[100px] text-justify"
 						value={content}
 						onChange={(e) => setContent(e.target.value)}
 					/>
@@ -102,6 +100,14 @@ const AddPost = () => {
 					toast.error(`content must be at least 20 character`);
 					return;
 				}
+				break;
+			}
+			case 2: {
+				if (!position) {
+					toast.error("please add your marker on the map");
+					return;
+				}
+				break;
 			}
 		}
 		setCurrentStep((prev) => prev + 1);
@@ -110,7 +116,11 @@ const AddPost = () => {
 		setCurrentStep((prev) => prev + -1);
 	};
 	const createPostHandler = () => {
-		if (isSignedIn && clerkId && position) {
+		if (!imageUrl) {
+			toast.error("please upload your image");
+			return;
+		}
+		if (isSignedIn && clerkId && position && imageUrl) {
 			startTransition(async () => {
 				await createPost(
 					clerkId,

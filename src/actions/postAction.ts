@@ -69,6 +69,11 @@ export const getAllPostsLocation = async () => {
 					},
 				},
 			},
+			orderBy: {
+				post: {
+					createdAt: "desc",
+				},
+			},
 		});
 		return locations;
 	} catch (error) {
