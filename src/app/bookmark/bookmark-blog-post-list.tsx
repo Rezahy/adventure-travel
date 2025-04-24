@@ -17,7 +17,7 @@ const BookmarkBlogPostList = ({ posts }: BookmarkBlogPostListProps) => {
 						{posts.map((post, index) => (
 							<motion.div
 								layout
-								key={index}
+								key={post.id}
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
 								transition={{
@@ -33,16 +33,13 @@ const BookmarkBlogPostList = ({ posts }: BookmarkBlogPostListProps) => {
 				</section>
 			);
 		}
-		return (
-			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ duration: 0.5 }}
-			>
-				<EmptyView>You didn&apos;t bookmark any post yet!</EmptyView>
-			</motion.div>
-		);
+		return <BookmarkBlogPostEmptyView />;
 	}
+	return <BookmarkBlogPostEmptyView />;
+};
+export default BookmarkBlogPostList;
+
+const BookmarkBlogPostEmptyView = () => {
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
@@ -53,4 +50,3 @@ const BookmarkBlogPostList = ({ posts }: BookmarkBlogPostListProps) => {
 		</motion.div>
 	);
 };
-export default BookmarkBlogPostList;
