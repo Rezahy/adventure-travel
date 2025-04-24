@@ -53,7 +53,7 @@ const BlogPost = async ({ className, post }: BlogPostProps) => {
 				</Suspense>
 			</div>
 			<CardHeader>
-				<CardDescription className="text-xs flex justify-between">
+				<CardDescription className="text-xs flex justify-between items-center">
 					<Badge variant="secondary">{post.createdAt.toDateString()}</Badge>
 					{userData &&
 						(userData.role === "ADMIN" ||

@@ -95,7 +95,7 @@ const AppSidebar = () => {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Application</SidebarGroupLabel>
+					{/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{menuItemLinks.map((item) => (
