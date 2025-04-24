@@ -24,6 +24,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: "Adventure Travel",
 	description: "Adventure Travel Blog Post",
+	keywords: [
+		"React",
+		"Nextjs",
+		"Prisma",
+		"React Leaflet",
+		"edgestore",
+		"shadcn",
+		"tailwindcss",
+		"clerk",
+	],
 };
 
 export default function RootLayout({
