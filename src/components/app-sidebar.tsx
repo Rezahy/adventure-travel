@@ -104,6 +104,7 @@ const AppSidebar = () => {
 										tooltip={item.title}
 										asChild
 										isActive={pathname === item.url}
+										onClick={sidebarMenuButtonClickHandler}
 									>
 										<Link href={item.url}>
 											<item.icon />
@@ -125,6 +126,7 @@ const AppSidebar = () => {
 										tooltip="sign up"
 										asChild
 										isActive={pathname === "/sign-up"}
+										onClick={sidebarMenuButtonClickHandler}
 									>
 										<Link href="/sign-up">
 											<UserRoundPlus />
@@ -137,6 +139,7 @@ const AppSidebar = () => {
 										tooltip="sign in"
 										asChild
 										isActive={pathname === "/sign-in"}
+										onClick={sidebarMenuButtonClickHandler}
 									>
 										<Link href="/sign-in">
 											<LogIn />
